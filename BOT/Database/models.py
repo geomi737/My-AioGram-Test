@@ -1,21 +1,19 @@
 from sqlalchemy.ext.asyncio import create_async_engine,AsyncAttrs,async_sessionmaker
 from sqlalchemy.orm import DeclarativeBase,mapped_column,Mapped
-from sqlalchemy import BigInteger,ForeignKey
+from sqlalchemy import BigInteger,ForeignKey,Date
 import asyncio
 
-#Создание базы данных и таблиц
+import datetime
+
 engine = create_async_engine(
-    url="sqlite+aiosqlite:///db.sqlite3"
+    url="sqlite+aiosqlite:///db.sqlite3",
 )
 
-#Создание менеджера сессий
 async_session = async_sessionmaker(engine)
 
-#Основной класс
 class Base(DeclarativeBase,AsyncAttrs):
     pass
 
-#Наследующие классы
 class User(Base):
     __tablename__ = 'Users'
     
@@ -23,8 +21,17 @@ class User(Base):
     tg_id = mapped_column(BigInteger)
     username: Mapped[str] = mapped_column(nullable=True)
     message_counter: Mapped[int]
+    
 
-#Создание новых таблиц
+class Subscription(Base):
+    __tablename__ = 'Subscriptions'
+    
+    user_id: Mapped[int] = mapped_column(ForeignKey('Users.id'),primary_key=True)
+    subscription_activity: Mapped[bool] = mapped_column(default=False)
+    subscription_date = mapped_column(Date,nullable=True)
+    subscription_days: Mapped[int] = mapped_column(nullable=True)
+
+    
 async def create_new_table():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

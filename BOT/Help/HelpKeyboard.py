@@ -3,7 +3,8 @@ from aiogram.types import ReplyKeyboardMarkup,KeyboardButton,InlineKeyboardButto
 hp_kbR = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text="Расскажи шутку🤓"),KeyboardButton(text="Расскажи курс валют💵")],
     [KeyboardButton(text="Мой профиль⚙️"),KeyboardButton(text="Помощь🤖")],
-    [KeyboardButton(text="Об авторе👥")]
+    [KeyboardButton(text="Настройки подписки🐍"),KeyboardButton(text="Об авторе👥")],
+    [KeyboardButton(text="Обновить клавиатуру⌨️")]
 ],resize_keyboard=True,input_field_placeholder="Пожалуйста выберите опцию...")
 
 hp_kbI = InlineKeyboardMarkup(inline_keyboard=[

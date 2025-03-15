@@ -1,15 +1,13 @@
-#Импортируем библиотеки
 import requests
+import json
 
-#Создаем функцию для получения шутки
+
 async def get_joke():
-    #Ссылка на API с шутками
     url = ("http://rzhunemogu.ru/RandJSON.aspx?CType=1")
 
-    #Получаем ответ от API
     responce = requests.get(url)
-    
-    #Проверям на успешность получения и выдаем
+    #responce.encoding = "windows-1251"
+
     if responce.status_code == 200:
         joke = responce.text
         joke = joke.replace('{"content":"', "").replace('"}', "")
