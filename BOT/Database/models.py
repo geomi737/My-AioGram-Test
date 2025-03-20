@@ -30,7 +30,12 @@ class Subscription(Base):
     subscription_activity: Mapped[bool] = mapped_column(default=False)
     subscription_date = mapped_column(Date,nullable=True)
     subscription_days: Mapped[int] = mapped_column(nullable=True)
-
+    
+class Notes(Base):
+    __tablename__ = 'Notes'
+    
+    user_id: Mapped[int] = mapped_column(ForeignKey('Users.id'),primary_key=True)
+    note: Mapped[dict] = mapped_column()
     
 async def create_new_table():
     async with engine.begin() as conn:

@@ -9,7 +9,7 @@ from aiogram.types import ReplyKeyboardRemove
 
 import Subscription.SubscriptionKeyboard as sk
 
-from Database.Requests import add_subscription,subscription_cancel,renew_sub_request
+from Database.Requests import add_subscription,subscription_cancel,renew_sub_request,check_sub
 
 sh_rt = Router()
 
@@ -40,7 +40,7 @@ async def days14_connect(callback: CallbackQuery):
     result = await add_subscription(callback.from_user.id,14)
     
     if result == 'Error: Не найден пользователь':
-        await callback.answer(text="Ошибка", show_alert=True)
+        await callback.answer(text="Ошибка установления подписки", show_alert=True)
     elif result == 'Error: Подписка уже есть':
         await callback.answer(text="Подписка уже есть", show_alert=True)
     elif result == 'SUCCESS!':
@@ -85,3 +85,13 @@ async def renew_sub(callback: CallbackQuery):
         await callback.answer(text="Ваша подписка всё еще активна более 3 дней,попробуйте позже",show_alert=True)
     elif result == 'SUCCESS!':
         await callback.answer(text="Успешно!",show_alert=True)
+        
+@sh_rt.message(Command("subscription_command"))
+async def sub_only(message: Message):
+    result = await check_sub(message.from_user.id)
+
+    if result == False:
+        await message.answer("У вас нет подписки")
+        
+    elif result == True:
+        await message.answer("Команда выполнена")

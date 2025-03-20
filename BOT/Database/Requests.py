@@ -8,29 +8,22 @@ async def initialize_user(tg_idF,usernameF):
     async with async_session() as session:
         user = await session.scalar(Select(User).where(User.tg_id == tg_idF))
 
-        if user is None and usernameF != "NonameHASH128125125152612":
-            new_user = User(
-               tg_id=tg_idF,
-                username=usernameF,
-                message_counter = 0
-            )
-            session.add(new_user)
-        
-        elif user is None:
-            new_user = User(
-               tg_id=tg_idF,
-                username="Ваш username некорректен!",
-                message_counter = 0
-            )
-            session.add(new_user)
-        if usernameF != "NonameHASH128125125152612":
-            if usernameF != user.username:
-                await session.execute(
-                    Update(User)
-                    .where(User.tg_id == tg_idF)
-                    .values(username=usernameF)
+        if user is None:
+            if usernameF == "NonameHASH128125125152612":
+                new_user = User(
+                tg_id=tg_idF,
+                    username='unknown',
+                    message_counter = 0
                 )
-        
+                session.add(new_user)
+            else:
+                new_user = User(
+                tg_id=tg_idF,
+                    username=usernameF,
+                    message_counter = 0
+                )
+                session.add(new_user)
+
         await session.commit()
 
         
@@ -146,3 +139,16 @@ async def renew_sub_request(tg_idF):
             await session.execute(Update(Subscription).where(Subscription.user_id == user.id).values(subscription_activity=True,subscription_date=datetime.now().date() + timedelta(days=sub_user.subscription_days),subscription_days=sub_user.subscription_days))
             await session.commit()
             return "SUCCESS!"
+        
+async def check_sub(tg_idF):
+    async with async_session() as session:
+        user = await session.scalar(Select(User).where(User.tg_id == tg_idF))
+        sub = await session.scalar(Select(Subscription).where(Subscription.user_id == user.id))
+        
+        if sub is not None:
+            if sub.subscription_activity == True:
+                return True
+            elif sub.subscription_activity == False:
+                return False
+        else:
+            return False

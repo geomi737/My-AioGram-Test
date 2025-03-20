@@ -9,7 +9,6 @@ async def get_values(value):
     
     firstResult = responce.json()
     try:
-        print(f"Запрошена валюта,а именно {value} - 1 USD = {firstResult["quotes"]["USD" + value]}")
-        return f"Курс данной валюты:\n1 USD = {firstResult["quotes"][f"USD" + value]} {value}"
+        return f"Курс данной валюты:\n1 USD = {firstResult['quotes']['USD' + value]} {value}"
     except KeyError:
         return "Введена недоступная валюта!"

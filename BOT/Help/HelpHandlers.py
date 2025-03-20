@@ -20,7 +20,7 @@ hh_rt = Router()
 async def start_command(message: Message):
     try:
         await initialize_user(message.from_user.id,message.from_user.username)
-        await message.answer(f"Здравствуй,{message.from_user.username},"+
+        await message.answer_photo('https://m.media-amazon.com/images/I/71m9fX5HlkL._UF1000,1000_QL80_.jpg',f"Здравствуй,{message.from_user.username},"+
                          "я бот.Но я не просто бот,я бот предназначеный для привязки к базе данных.",reply_markup=hp_kbR)
     except AttributeError:
         await initialize_user(message.from_user.id,"NonameHASH128125125152612")
@@ -57,7 +57,7 @@ async def message_cSayer(message: Message):
     )
     
     # Проверяем наличие информации о подписке
-    if SubInfo and SubInfo != "Отсутствие данных!":
+    if SubInfo != None and SubInfo != "Отсутствие данных!":
         try:
             SubInfo_Date_ForUser = SubInfo.subscription_date.strftime("%d.%m.%Y") if SubInfo.subscription_date else "Не указана"
             SubInfo_forUser = "Активна" if SubInfo.subscription_activity else "Неактивна"
